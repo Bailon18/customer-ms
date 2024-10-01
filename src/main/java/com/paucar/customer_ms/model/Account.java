@@ -4,7 +4,6 @@ package com.paucar.customer_ms.model;
 import com.paucar.customer_ms.util.EstadoCuenta;
 import com.paucar.customer_ms.util.TipoCuenta;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
