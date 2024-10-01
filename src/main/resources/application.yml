@@ -40,7 +40,7 @@ springdoc:
 eureka:
   client:
     service-url:
-      defaultZone: https://euraka-server-production.up.railway.app
+      defaultZone: https://euraka-server-production.up.railway.app/eureka
 
   instance:
     prefer-ip-address: true
