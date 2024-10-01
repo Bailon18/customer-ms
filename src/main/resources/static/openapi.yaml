@@ -5,6 +5,8 @@ info:
   description: API para la gestión de la información de clientes en el sistema bancario.
 
 servers:
+  - url: https://customer-ms-production.up.railway.app  # URL de producción en Railway
+    description: Servidor en producción
   - url: http://localhost:8082
     description: Servidor local para desarrollo
 
