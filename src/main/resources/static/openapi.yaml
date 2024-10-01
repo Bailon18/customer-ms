@@ -1,0 +1,232 @@
+openapi: 3.0.1
+info:
+  title: API de Microservicio de Clientes
+  version: 1.0.0
+  description: API para la gestión de la información de clientes en el sistema bancario.
+
+servers:
+  - url: http://localhost:8082
+    description: Servidor local para desarrollo
+
+paths:
+  /customer:
+    get:
+      summary: Recuperar todos los clientes
+      description: Devuelve la lista completa de todos los clientes registrados.
+      responses:
+        '200':
+          description: Una lista de todos los clientes recuperada exitosamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerDTO'
+              example:
+                - id: 1
+                  name: "Juan"
+                  lastname: "Perez"
+                  dni: "12345678"
+                  email: "juan.perez@ejemplo.com"
+                - id: 2
+                  name: "Maria"
+                  lastname: "Gonzalez"
+                  dni: "87654321"
+                  email: "maria.gonzalez@ejemplo.com"
+    post:
+      summary: Crear un nuevo cliente
+      description: Registra un nuevo cliente en el sistema. El campo `id` no debe incluirse en la solicitud.
+      requestBody:
+        description: Objeto CustomerDTO que se debe agregar al sistema
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDTO'
+            example:
+              name: "Carlos"
+              lastname: "Lopez"
+              dni: "11223344"
+              email: "carlos.lopez@ejemplo.com"
+      responses:
+        '201':
+          description: Cliente creado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDTO'
+        '400':
+          description: Entrada inválida o DNI/Email duplicado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                message: "DNI duplicado: 11223344"
+
+  /customer/{id}:
+    get:
+      summary: Obtener un cliente por su ID
+      description: Devuelve la información detallada de un cliente a partir de su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID del cliente que se desea recuperar.
+      responses:
+        '200':
+          description: Información detallada del cliente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDTO'
+        '404':
+          description: Cliente no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 404
+                message: "Cliente no encontrado con el ID: 5"
+
+    put:
+      summary: Actualizar un cliente existente por su ID
+      description: Actualiza los detalles de un cliente a partir de su ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID del cliente que se desea actualizar.
+      requestBody:
+        description: Objeto CustomerDTO que se debe actualizar (incluye el campo `id`).
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDTO'
+      responses:
+        '200':
+          description: Cliente actualizado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDTO'
+        '400':
+          description: Entrada inválida o DNI/Email duplicado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                message: "El correo electrónico ya está en uso."
+        '404':
+          description: Cliente no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 404
+                message: "Cliente no encontrado con el ID: 3"
+
+    delete:
+      summary: Eliminar un cliente por su ID
+      description: Elimina un cliente si no tiene cuentas activas.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID del cliente que se desea eliminar.
+      responses:
+        '200':
+          description: Cliente eliminado exitosamente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                status: 200
+                message: "Cliente eliminado exitosamente."
+        '400':
+          description: No se puede eliminar el cliente porque tiene cuentas activas.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                code: 400
+                message: "No se puede eliminar el cliente porque tiene cuentas activas."
+        '404':
+          description: Cliente no encontrado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    CustomerDTO:
+      type: object
+      required:
+        - name
+        - lastname
+        - dni
+        - email
+      properties:
+        id:
+          type: integer
+          description: Identificador único del cliente.
+          example: 1
+        name:
+          type: string
+          description: Nombre del cliente (entre 2 y 50 caracteres).
+          minLength: 2
+          maxLength: 50
+          example: "Bailon"
+        lastname:
+          type: string
+          description: Apellido del cliente (entre 2 y 50 caracteres).
+          minLength: 2
+          maxLength: 50
+          example: "Paucar Montes"
+        dni:
+          type: string
+          description: Número de DNI único (8 dígitos).
+          pattern: "^[0-9]{8}$"
+          example: "47094589"
+        email:
+          type: string
+          description: Dirección de correo electrónico.
+          format: email
+          example: "paucarmontesbailon@gmail.com"
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Código de error HTTP.
+          example: 400
+        message:
+          type: string
+          description: Descripción del error.
+          example: "Entrada inválida o duplicada."
+
+    SuccessResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: Código de estado HTTP.
+        message:
+          type: string
+          description: Mensaje de éxito.
