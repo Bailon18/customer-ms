@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer")
+@CrossOrigin(origins = "*") 
 public class CustomerController {
 
     private final CustomerService customerService;
