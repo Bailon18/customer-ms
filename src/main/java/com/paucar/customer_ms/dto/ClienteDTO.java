@@ -5,11 +5,11 @@ import lombok.*;
 
 @Setter
 @Getter
-public class CustomerDTO {
+public class ClienteDTO {
 
     private long id;
-    private String name;
-    private String lastname;
+    private String nombre;
+    private String apellido;
     private String dni;
     private String email;
 
