@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "ACCOUNT-MS", url = "https://account-ms-production.up.railway.app") // url = "https://account-ms-production.up.railway.app"
+// Quitar el parámetro 'url' al manejarse localmente
+@FeignClient(name = "ACCOUNT-MS", url = "https://account-ms-production.up.railway.app")
 public interface CuentaFeign {
 
     @GetMapping("/cuentas/cliente/{clienteId}")

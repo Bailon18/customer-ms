@@ -1,4 +1,4 @@
-# Configuración del servidor
+# Descomentar las siguientes líneas para manejarse localmente:
 #server:
 # port: 8082
 
@@ -9,7 +9,6 @@ spring:
   mvc:
     throw-exception-if-no-handler-found: true
 
-  # Configuración de la base de datos
   datasource:
     url: jdbc:mysql://autorack.proxy.rlwy.net:25967/railway
     username: root
@@ -40,9 +39,11 @@ eureka:
   client:
     service-url:
       defaultZone: https://euraka-server-production.up.railway.app/eureka/
+      # Descomentar la siguiente línea para trabajar localmente:
       #defaultZone: http://localhost:8761/eureka/
 
   instance:
     prefer-ip-address: false
     hostname: customer-ms-production.up.railway.app
+    # Descomentar la siguiente línea para trabajar localmente:
     #hostname: localhost
