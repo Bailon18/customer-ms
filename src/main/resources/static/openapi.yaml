@@ -5,10 +5,10 @@ info:
   description: Microservicio para la gestión de clientes en un sistema bancario.
 
 servers:
-  - url: https://customer-ms-production.up.railway.app
-    description: Servidor de producción
-  #- url: http://localhost:8082
-  #  description: Servidor local
+  #- url: https://customer-ms-production.up.railway.app
+  #  description: Servidor de producción
+  - url: http://localhost:8082
+    description: Servidor local
 
 paths:
   /cliente:

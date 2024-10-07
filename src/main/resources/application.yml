@@ -13,6 +13,8 @@ spring:
     url: jdbc:mysql://autorack.proxy.rlwy.net:25967/railway
     username: root
     password: WzvqTyAqnqQGihPaPjtWDtJBtoRfWKbz
+    #url: jdbc:mysql://localhost:3306/customer_db
+    #password: admin
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
