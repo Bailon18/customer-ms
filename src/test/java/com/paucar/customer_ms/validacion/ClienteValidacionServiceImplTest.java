@@ -37,7 +37,6 @@ class ClienteValidacionServiceImplTest {
     void validarCliente_CuandoEmailYaRegistrado_DeberiaLanzarExcepcion() {
         log.info("Iniciando prueba: validarCliente_CuandoEmailYaRegistrado_DeberiaLanzarExcepcion");
 
-        // Datos de prueba peruanos
         Cliente cliente = Cliente.builder()
                 .id(1L)
                 .nombre("Luis")
@@ -46,11 +45,9 @@ class ClienteValidacionServiceImplTest {
                 .email("luis.gonzales@gmail.com")
                 .build();
 
-        // Simular que el email ya existe en otro cliente
         Cliente clienteExistente = Cliente.builder().id(2L).email("luis.gonzales@gmail.com").build();
         when(clienteRepository.findByEmail("luis.gonzales@gmail.com")).thenReturn(Optional.of(clienteExistente));
 
-        // Llamar al método y validar la excepción
         assertThrows(EmailYaRegistradoException.class, () -> clienteValidacionService.validarCliente(cliente, 1L));
 
         log.info("Resultado: se lanzó la excepción EmailYaRegistradoException correctamente");
@@ -61,7 +58,6 @@ class ClienteValidacionServiceImplTest {
     void validarCliente_CuandoDniYaRegistrado_DeberiaLanzarExcepcion() {
         log.info("Iniciando prueba: validarCliente_CuandoDniYaRegistrado_DeberiaLanzarExcepcion");
 
-        // Datos de prueba peruanos
         Cliente cliente = Cliente.builder()
                 .id(1L)
                 .nombre("María")
@@ -70,11 +66,9 @@ class ClienteValidacionServiceImplTest {
                 .email("maria.rojas@hotmail.com")
                 .build();
 
-        // Simular que el DNI ya existe en otro cliente
         Cliente clienteExistente = Cliente.builder().id(2L).dni("65432178").build();
         when(clienteRepository.findByDni("65432178")).thenReturn(Optional.of(clienteExistente));
 
-        // Llamar al método y validar la excepción
         assertThrows(DniYaRegistradoException.class, () -> clienteValidacionService.validarCliente(cliente, 1L));
 
         log.info("Resultado: se lanzó la excepción DniYaRegistradoException correctamente");
@@ -85,7 +79,6 @@ class ClienteValidacionServiceImplTest {
     void validarCliente_CuandoEmailYdDniNoRegistrados_NoDeberiaLanzarExcepcion() {
         log.info("Iniciando prueba: validarCliente_CuandoEmailYdDniNoRegistrados_NoDeberiaLanzarExcepcion");
 
-        // Datos de prueba peruanos
         Cliente cliente = Cliente.builder()
                 .id(1L)
                 .nombre("Juan")
@@ -94,11 +87,9 @@ class ClienteValidacionServiceImplTest {
                 .email("juan.quispe@outlook.com")
                 .build();
 
-        // Simular que no existe el email ni el DNI en otros clientes
         when(clienteRepository.findByEmail("juan.quispe@outlook.com")).thenReturn(Optional.empty());
         when(clienteRepository.findByDni("78965432")).thenReturn(Optional.empty());
 
-        // Llamar al método y verificar que no lanza excepciones
         assertDoesNotThrow(() -> clienteValidacionService.validarCliente(cliente, 1L));
 
         log.info("Resultado: la validación se completó sin excepciones");
@@ -110,7 +101,6 @@ class ClienteValidacionServiceImplTest {
     void validarCliente_CuandoEsElMismoCliente_NoDeberiaLanzarExcepcion() {
         log.info("Iniciando prueba: validarCliente_CuandoEsElMismoCliente_NoDeberiaLanzarExcepcion");
 
-        // Datos de prueba peruanos
         Cliente cliente = Cliente.builder()
                 .id(1L)
                 .nombre("Ana")
@@ -119,7 +109,6 @@ class ClienteValidacionServiceImplTest {
                 .email("ana.flores@peru.com")
                 .build();
 
-        // Simular que el cliente actual tiene el mismo email y DNI que el existente (misma ID)
         Cliente clienteExistente = Cliente.builder()
                 .id(1L)
                 .dni("76543219")
@@ -129,7 +118,6 @@ class ClienteValidacionServiceImplTest {
         when(clienteRepository.findByEmail("ana.flores@peru.com")).thenReturn(Optional.of(clienteExistente));
         when(clienteRepository.findByDni("76543219")).thenReturn(Optional.of(clienteExistente));
 
-        // Llamar al método y verificar que no lanza excepciones
         assertDoesNotThrow(() -> clienteValidacionService.validarCliente(cliente, 1L));
 
         log.info("Resultado: la validación del cliente se completó sin excepciones");

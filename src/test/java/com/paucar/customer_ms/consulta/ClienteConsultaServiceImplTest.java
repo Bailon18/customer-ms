@@ -44,7 +44,6 @@ class ClienteConsultaServiceImplTest {
     void obtenerTodosLosClientes_DeberiaRetornarListaDeClientes() {
         log.info("Iniciando prueba: obtenerTodosLosClientes_DeberiaRetornarListaDeClientes");
 
-        // Simular una lista de clientes en el repositorio usando el patrón Builder
         List<Cliente> clientes = Arrays.asList(
                 Cliente.builder()
                         .id(1L)
@@ -63,7 +62,6 @@ class ClienteConsultaServiceImplTest {
         );
         when(clienteRepository.findAll()).thenReturn(clientes);
 
-        // Simular el mapeo de entidades a DTO usando el patrón Builder
         when(clienteMapper.convertiADTO(clientes.get(0)))
                 .thenReturn(ClienteDTO.builder()
                         .id(1L)
@@ -81,13 +79,10 @@ class ClienteConsultaServiceImplTest {
                         .email("maria@gmail.com")
                         .build());
 
-        // Ejecutar el método a probar
         List<ClienteDTO> resultado = clienteConsultaService.obtenerTodosLosClientes();
 
-        // Log del resultado mejorado
         resultado.forEach(cliente -> log.info("Cliente encontrado: {}", cliente.toString()));
 
-        // Validar el resultado
         assertNotNull(resultado);
         assertEquals(2, resultado.size());
     }
@@ -96,7 +91,6 @@ class ClienteConsultaServiceImplTest {
     void buscarClientePorId_CuandoClienteExiste_DeberiaRetornarCliente() {
         log.info("Iniciando prueba: buscarClientePorId_CuandoClienteExiste_DeberiaRetornarCliente");
 
-        // Simular un cliente en el repositorio usando el patrón Builder
         Cliente cliente = Cliente.builder()
                 .id(1L)
                 .nombre("Juan")
@@ -106,7 +100,6 @@ class ClienteConsultaServiceImplTest {
                 .build();
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
 
-        // Simular el mapeo de la entidad a DTO usando el patrón Builder
         ClienteDTO clienteDTO = ClienteDTO.builder()
                 .id(1L)
                 .nombre("Juan")
@@ -116,13 +109,10 @@ class ClienteConsultaServiceImplTest {
                 .build();
         when(clienteMapper.convertiADTO(cliente)).thenReturn(clienteDTO);
 
-        // Ejecutar el método a probar
         Optional<ClienteDTO> resultado = clienteConsultaService.buscarClientePorId(1L);
 
-        // Log del resultado mejorado
         resultado.ifPresent(clienteEncontrado -> log.info("Cliente encontrado por ID: {}", clienteEncontrado.toString()));
 
-        // Validar el resultado
         assertTrue(resultado.isPresent());
         assertEquals("Juan", resultado.get().getNombre());
     }
@@ -131,13 +121,10 @@ class ClienteConsultaServiceImplTest {
     void buscarClientePorId_CuandoClienteNoExiste_DeberiaLanzarExcepcion() {
         log.info("Iniciando prueba: buscarClientePorId_CuandoClienteNoExiste_DeberiaLanzarExcepcion");
 
-        // Simular que el cliente no existe en el repositorio
         when(clienteRepository.findById(99L)).thenReturn(Optional.empty());
 
-        // Validar que se lanza la excepción y capturar el mensaje de error
         ClienteNoEncontradoException exception = assertThrows(ClienteNoEncontradoException.class, () -> clienteConsultaService.buscarClientePorId(99L));
 
-        // Log de la excepción con mensaje detallado
         log.error("Excepción lanzada: Cliente con ID {} no encontrado. Mensaje: {}", 99L, exception.getMessage());
     }
 }
