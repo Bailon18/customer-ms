@@ -3,8 +3,12 @@ package com.paucar.customer_ms.dto;
 
 import lombok.*;
 
+@Builder
 @Setter
 @Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClienteDTO {
 
     private long id;

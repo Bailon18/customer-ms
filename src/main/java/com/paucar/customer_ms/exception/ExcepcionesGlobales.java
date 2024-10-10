@@ -90,7 +90,8 @@ public class ExcepcionesGlobales {
         Map<String, String> errores = ex.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
                         violation -> violation.getPropertyPath().toString(),
-                        ConstraintViolation::getMessage
+                        ConstraintViolation::getMessage,
+                        (mensaje1, mensaje2) -> mensaje1 + "; " + mensaje2
                 ));
 
         ApiResponse<Map<String, String>> respuesta = ApiResponse.<Map<String, String>>builder()
@@ -101,6 +102,7 @@ public class ExcepcionesGlobales {
 
         return new ResponseEntity<>(respuesta, HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> manejarExcepcionGlobal(Exception ex) {

@@ -7,7 +7,7 @@ import com.paucar.customer_ms.exception.ClienteNoEncontradoException;
 import com.paucar.customer_ms.exception.DniYaRegistradoException;
 import com.paucar.customer_ms.exception.EmailYaRegistradoException;
 import com.paucar.customer_ms.mapper.ClienteMapper;
-import com.paucar.customer_ms.model.Cuenta;
+import com.paucar.customer_ms.client.dto.Cuenta;
 import com.paucar.customer_ms.model.Cliente;
 import com.paucar.customer_ms.repository.ClienteRepository;
 import com.paucar.customer_ms.service.ClienteService;

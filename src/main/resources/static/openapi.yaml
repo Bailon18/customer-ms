@@ -2,18 +2,25 @@ openapi: 3.0.1
 info:
   title: API de Microservicio Clientes
   version: 1.0.0
-  description: Microservicio para la gestión de clientes en un sistema bancario.
-
+  description: |
+    Microservicio para la gestión de clientes en un sistema bancario.
+    Permite realizar operaciones CRUD sobre clientes.
 servers:
   - url: https://customer-ms-production.up.railway.app
     description: Servidor de producción
-  #url: http://localhost:8082
-  #  description: Servidor local
+  - url: http://localhost:8082
+    description: Servidor local
+
+tags:
+  - name: Cliente
+    description: Operaciones relacionadas con clientes.
 
 paths:
   /cliente:
     get:
       summary: Obtener todos los clientes
+      tags:
+        - Cliente
       responses:
         '200':
           description: Lista de clientes
@@ -23,29 +30,51 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Cliente'
+        '500':
+          description: Error interno del servidor
     post:
       summary: Crear un cliente
+      tags:
+        - Cliente
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Cliente'
+            example:
+              nombre: "Kevin"
+              apellido: "Paucar"
+              dni: "12345678"
+              email: "kevin.paucar@example.com"
       responses:
         '201':
-          description: Cliente creado
+          description: Cliente creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cliente'
         '400':
-          description: Error de validación
+          description: Error de validación de entrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
 
   /cliente/{id}:
     get:
       summary: Obtener cliente por ID
+      tags:
+        - Cliente
       parameters:
         - name: id
           in: path
           required: true
           schema:
             type: integer
+          description: ID único del cliente
       responses:
         '200':
           description: Detalles del cliente
@@ -55,8 +84,16 @@ paths:
                 $ref: '#/components/schemas/Cliente'
         '404':
           description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
     put:
       summary: Actualizar cliente
+      tags:
+        - Cliente
       parameters:
         - name: id
           in: path
@@ -71,13 +108,23 @@ paths:
               $ref: '#/components/schemas/Cliente'
       responses:
         '200':
-          description: Cliente actualizado
+          description: Cliente actualizado exitosamente
         '400':
           description: Error de validación
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       summary: Eliminar cliente
+      tags:
+        - Cliente
       parameters:
         - name: id
           in: path
@@ -86,24 +133,59 @@ paths:
             type: integer
       responses:
         '200':
-          description: Cliente eliminado
+          description: Cliente eliminado exitosamente
         '400':
           description: No se puede eliminar porque tiene cuentas activas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Error interno del servidor
 
 components:
   schemas:
     Cliente:
       type: object
+      description: Representa un cliente del sistema
       properties:
         id:
           type: integer
+          description: ID único del cliente
         nombre:
           type: string
-        apellio:
+          description: Nombre del cliente
+          minLength: 2
+          maxLength: 50
+        apellido:
           type: string
+          description: Apellido del cliente
+          minLength: 2
+          maxLength: 50
         dni:
           type: string
+          description: Documento Nacional de Identidad (8 dígitos)
+          minLength: 8
+          maxLength: 8
         email:
           type: string
+          description: Correo electrónico del cliente
+      example:
+        id: 1
+        nombre: "Kevin"
+        apellido: "Paucar"
+        dni: "12345678"
+        email: "kevin.paucar@example.com"
+
+    ErrorResponse:
+      type: object
+      properties:
+        mensaje:
+          type: string
+          description: Detalle del error ocurrido

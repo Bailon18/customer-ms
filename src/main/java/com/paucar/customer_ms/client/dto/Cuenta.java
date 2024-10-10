@@ -1,4 +1,4 @@
-package com.paucar.customer_ms.model;
+package com.paucar.customer_ms.client.dto;
 
 import com.paucar.customer_ms.util.EstadoCuenta;
 import com.paucar.customer_ms.util.TipoCuenta;
